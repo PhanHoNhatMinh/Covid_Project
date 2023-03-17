@@ -27,23 +27,10 @@ Where Location like '%states'
 Order By 1,2 desc
 
 
---Looking at Countries with Highest Infection Rate compared to Population
-SELECT Location, population, MAX(total_cases) as HighestInfectionCount, MAX((total_cases/population))*100 as PercentPopulationInfected
-FROM CovidDeaths$
---Where Location LIKE '$tate$'
-Group By Location, population
-Order By PercentPopulationInfected desc
+-----------------------
+-- Data Visualization for creating Tableau dashboard
 
-
--- Showing Countries with Highest Death Count per Population
-SELECT continent, MAX(cast(total_deaths as int)) as TotalDeathCount
-FROM CovidDeaths$
---Where Location LIKE '$tate$'
-Where continent is not null
-Group By continent
-Order By TotalDeathCount desc
-
-
+-- 1
 -- GLOBAL NUMBERS
 SELECT 
 	SUM(New_cases) as total_cases
@@ -53,6 +40,39 @@ FROM CovidDeaths$
 WHERE Continent is not NULL
 ORDER BY 1,2
 
+
+-- 2
+--Death Count per Continent
+--European Union is a part of Europe
+SELECT location, MAX(cast(total_deaths as int)) as TotalDeathCount
+FROM CovidDeaths$
+--Where Location LIKE '$tate$'
+Where continent is null
+and location not in ('World', 'High income', 'Upper middle income', 'Lower middle income', 'European Union', 'Low income', 'International')
+Group By location
+Order By TotalDeathCount desc
+
+
+-- 3
+--Looking at Countries with Highest Infection Rate compared to Population
+SELECT
+	Location, population, date, MAX(total_cases) as HighestInfectionCount, MAX((total_cases/population))*100 as PercentPopulationInfected
+FROM CovidDeaths$
+--Where Location LIKE '$tate$'
+Group By Location, population, date
+Order By PercentPopulationInfected desc
+
+
+-- 4
+SELECT
+	Location, population, date, MAX(total_cases) as HighestInfectionCount, MAX((total_cases/population))*100 as PercentPopulationInfected
+FROM CovidDeaths$
+--Where Location LIKE '$tate$'
+Group By Location, population, date
+Order By PercentPopulationInfected desc
+
+
+------------------
 
 --Looking at Total Population vs Vaccinations
 SELECT
